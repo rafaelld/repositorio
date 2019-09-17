@@ -20,8 +20,21 @@ SimpleDateFormat sdf = new SimpleDateFormat(formato);
 Connection con;
 Class.forName("org.postgresql.Driver");
 
+String id = request.getParameter("encomendaId");
+if(id == null || id.equals("")){
+	id = "0";
+} else {
+	try {
+        int i = Integer.parseInt(id);
+    } catch (NumberFormatException e) {
+        id = "0";
+    } catch (NullPointerException e) {
+    	id = "0";
+    }
+}
+
 con=(Connection)DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "rafael2903");
-String command = "SELECT * from rastreio WHERE rastreio.\"encomendaId\" = " + request.getParameter("encomendaId") + " ORDER BY rastreio.\"statusId\"";
+String command = "SELECT * from rastreio WHERE rastreio.\"encomendaId\" = " + id + " ORDER BY rastreio.\"statusId\"";
 
 PreparedStatement ps=(PreparedStatement)con.prepareStatement(command);
 ResultSet rs=ps.executeQuery();
